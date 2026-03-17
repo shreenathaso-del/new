@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Top Students - Leaderboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+.home-btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 15px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.home-btn:hover {
+    background: #2980b9;
+}
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f4f6f9;
+}
+
+header {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: #34495e;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+.top1 {
+    background: gold;
+    font-weight: bold;
+}
+
+.top2 {
+    background: silver;
+    font-weight: bold;
+}
+
+.top3 {
+    background: #cd7f32;
+    color: white;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background: #2c3e50;
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🏆 COPA Top Students Leaderboard</h1>
+<p>Performance & Practice Ranking</p>
+</header>
+
+<h2>Top Performers</h2>
+<a href="index.html" class="home-btn">🏠 Home</a>
+
+<table>
+<tr>
+<th>Rank</th>
+<th>Student Name</th>
+<th>Marks</th>
+<th>Performance</th>
+</tr>
+
+<tr class="top1">
+<td>1</td>
+<td>Rahul</td>
+<td>95%</td>
+<td>Excellent</td>
+</tr>
+
+<tr class="top2">
+<td>2</td>
+<td>Priya</td>
+<td>90%</td>
+<td>Very Good</td>
+</tr>
+
+<tr class="top3">
+<td>3</td>
+<td>Amit</td>
+<td>88%</td>
+<td>Very Good</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Neha</td>
+<td>85%</td>
+<td>Good</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Ravi</td>
+<td>82%</td>
+<td>Good</td>
+</tr>
+
+<h2>🏆 Live Leaderboard</h2>
+
+<table border="1" id="leaderboard">
+<tr>
+<th>Score</th>
+<th>Name</th>
+</tr>
+</table>
+
+<script>
+const sheetID = "17dkLPyfTOFRbuXa4NWy5pWvwehnpfT8BcO2gjAQT2PQ";
+
+// ⚠️ yaha sheet name add kiya
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=Form%20Responses%201`;
+
+fetch(url)
+.then(res => res.text())
+.then(csv => {
+    console.log(csv); // debug
+
+    const rows = csv.split("\n").slice(1);
+    const table = document.getElementById("leaderboard");
+
+    rows.forEach(row => {
+        if(row.trim() !== ""){
+            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+
+            let score = cols[1]?.replace(/"/g, '').trim();
+            let name = cols[2]?.replace(/"/g, '').trim();
+
+            if(score && name){
+                let tr = document.createElement("tr");
+
+                let td1 = document.createElement("td");
+                td1.innerText = score;
+
+                let td2 = document.createElement("td");
+                td2.innerText = name;
+
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                table.appendChild(tr);
+            }
+        }
+    });
+})
+.catch(err => console.error("Error:", err));
+</script>
+<footer>
+<p>© COPA Student Portal</p>
+</footer>
+
+</body>
+</html>
