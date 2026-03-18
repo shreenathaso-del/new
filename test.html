@@ -68,8 +68,8 @@ button:hover {
 <div class="container">
 
 <div class="test-box">
-<h2>Monthly Test Test</h2>
-!<p>Basic HTML Tags & Structure</p>
+<h2>Monthly Test</h2>
+<p>All Topics</p>
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSc5UkYOkbOLNf2klQbs7A8xj9m7uwR62QATbEYQ8j677_3H0Q/viewform?usp=dialog" target="_blank">
 <button>Start Test</button>
 </a>
@@ -79,6 +79,60 @@ button:hover {
 
 
 </div>
+
+<h2>📝 Online Test</h2>
+
+<a id="testBtn" target="_blank">
+<button>Start Test</button>
+</a>
+
+<br><br>
+
+<button onclick="loadResult()">View Result</button>
+
+<table border="1" id="resultTable">
+<tr>
+<th>Score</th>
+<th>Name</th>
+</tr>
+</table>
+
+<script>
+
+// Test link auto
+let formLink = localStorage.getItem("formLink");
+if(formLink){
+    document.getElementById("testBtn").href = formLink;
+}
+
+// Result load
+function loadResult(){
+    let sheetID = localStorage.getItem("sheetID");
+
+    const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=Form Responses 1`;
+
+    fetch(url)
+    .then(res => res.text())
+    .then(data => {
+        const jsonData = JSON.parse(data.substring(47).slice(0, -2));
+        const rows = jsonData.table.rows;
+
+        let table = document.getElementById("resultTable");
+
+        rows.forEach(row => {
+            let score = row.c[1]?.v;
+            let name = row.c[2]?.v;
+
+            if(score && name){
+                let tr = document.createElement("tr");
+                tr.innerHTML = `<td>${score}</td><td>${name}</td>`;
+                table.appendChild(tr);
+            }
+        });
+    });
+}
+
+</script>
 
 </body>
 </html>
