@@ -149,7 +149,7 @@ border-radius:5px;
 
 <script>
 
-const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=Form Responses 1`;
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?gid=220932831`;
 
 fetch(url)
 .then(res => res.text())
@@ -161,12 +161,10 @@ fetch(url)
     let students = [];
 
     rows.forEach(row => {
-        let scoreRaw = row.c[1]?.v; // score column
-        let name = row.c[2]?.v;     // name column
+        let scoreRaw = row.c[1]?.v;
+        let name = row.c[2]?.v;
 
         if(scoreRaw && name){
-
-            // "26 / 40" → 26 निकालना
             let score = parseInt(scoreRaw.split("/")[0]);
 
             students.push({
@@ -176,10 +174,8 @@ fetch(url)
         }
     });
 
-    // score के हिसाब से sort (high to low)
     students.sort((a,b) => b.score - a.score);
 
-    // Top 3 set करें
     if(students[0]){
         document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
     }
@@ -193,7 +189,10 @@ fetch(url)
     }
 
 })
-.catch(err => console.log(err));
+.catch(err => {
+    console.log(err);
+    alert("Data load nahi ho raha");
+});
 
 </script>
 </body>
