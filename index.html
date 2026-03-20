@@ -151,7 +151,7 @@ border-radius:5px;
 
 const sheetID = "1E6Z2Dyqy3OGvHpB3c_FSzOTx7PdGnFFb4ih0SvzDAtQ";
 
-const url = const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=220932831`;
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=220932831`;
 
 fetch(url)
 .then(res => res.text())
@@ -163,36 +163,53 @@ fetch(url)
 
     rows.forEach(row => {
         if(row.trim() !== ""){
+
             const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-            let scoreRaw = cols[1]?.replace(/"/g, '').trim();
-            let name = cols[2]?.replace(/"/g, '').trim();
+            let scoreRaw = cols[1];
+            let name = cols[2];
 
             if(scoreRaw && name){
 
-                let score = parseInt(scoreRaw.split("/")[0]);
+                // साफ करो
+                scoreRaw = scoreRaw.replace(/"/g,'').trim();
+                name = name.replace(/"/g,'').trim();
 
-                students.push({
-                    name: name,
-                    score: score
-                });
+                // सिर्फ नंबर निकालो
+                let scoreMatch = scoreRaw.match(/\d+/);
+
+                if(scoreMatch){
+                    let score = parseInt(scoreMatch[0]);
+
+                    students.push({
+                        name: name,
+                        score: score
+                    });
+                }
             }
         }
     });
 
-    // sort highest marks first
+    // DEBUG (important)
+    console.log("Students:", students);
+
+    // sort
     students.sort((a,b) => b.score - a.score);
 
-    document.getElementById("first").innerText = students[0] ? "🥇 " + students[0].name : "No Data";
-    document.getElementById("second").innerText = students[1] ? "🥈 " + students[1].name : "No Data";
-    document.getElementById("third").innerText = students[2] ? "🥉 " + students[2].name : "No Data";
+    // display
+    document.getElementById("first").innerText = students[0] ? "🥇 1st: " + students[0].name : "No Data";
+    document.getElementById("second").innerText = students[1] ? "🥈 2nd: " + students[1].name : "No Data";
+    document.getElementById("third").innerText = students[2] ? "🥉 3rd: " + students[2].name : "No Data";
 
 })
 .catch(err => {
     console.log(err);
-    alert("Data load nahi ho raha");
+    alert("Error aa raha hai");
 });
 
 </script>
+🧪 अब तुरंत check करो
+
+👉 Browser में:
 </body>
 </html>
