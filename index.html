@@ -145,41 +145,40 @@ border-radius:5px;
 <p>© COPA Students Portal GANGAPUR</p>
 
 </footer>
+
 <script src="config.js"></script>
 
 <script>
 
-const sheetID = "1E6Z2Dyqy3OGvHpB3c_FSzOTx7PdGnFFb4ih0SvzDAtQ";
+var sheetID = "1E6Z2Dyqy3OGvHpB3c_FSzOTx7PdGnFFb4ih0SvzDAtQ";
 
-const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&gid=220932831`;
+var url = "https://docs.google.com/spreadsheets/d/" + sheetID + "/gviz/tq?tqx=out:csv&gid=220932831";
 
 fetch(url)
-.then(res => res.text())
-.then(csv => {
+.then(function(res){ return res.text(); })
+.then(function(csv){
 
-    const rows = csv.split("\n").slice(1);
+    var rows = csv.split("\n").slice(1);
 
-    let students = [];
+    var students = [];
 
-    rows.forEach(row => {
+    rows.forEach(function(row){
         if(row.trim() !== ""){
 
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            var cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-            let scoreRaw = cols[1];
-            let name = cols[2];
+            var scoreRaw = cols[1];
+            var name = cols[2];
 
             if(scoreRaw && name){
 
-                // साफ करो
                 scoreRaw = scoreRaw.replace(/"/g,'').trim();
                 name = name.replace(/"/g,'').trim();
 
-                // सिर्फ नंबर निकालो
-                let scoreMatch = scoreRaw.match(/\d+/);
+                var match = scoreRaw.match(/\d+/);
 
-                if(scoreMatch){
-                    let score = parseInt(scoreMatch[0]);
+                if(match){
+                    var score = parseInt(match[0]);
 
                     students.push({
                         name: name,
@@ -190,26 +189,18 @@ fetch(url)
         }
     });
 
-    // DEBUG (important)
-    console.log("Students:", students);
+    students.sort(function(a,b){ return b.score - a.score; });
 
-    // sort
-    students.sort((a,b) => b.score - a.score);
-
-    // display
     document.getElementById("first").innerText = students[0] ? "🥇 1st: " + students[0].name : "No Data";
     document.getElementById("second").innerText = students[1] ? "🥈 2nd: " + students[1].name : "No Data";
     document.getElementById("third").innerText = students[2] ? "🥉 3rd: " + students[2].name : "No Data";
 
 })
-.catch(err => {
+.catch(function(err){
     console.log(err);
     alert("Error aa raha hai");
 });
 
 </script>
-🧪 अब तुरंत check करो
-
-👉 Browser में:
 </body>
 </html>
