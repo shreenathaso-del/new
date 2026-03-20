@@ -83,6 +83,15 @@ border-radius:5px;
 <a href="#contact">Contact</a>
 </nav>
 
+<div id="top3" style="background:white; padding:15px; margin:20px; border-radius:10px;">
+<h3>🏆 Top Performers</h3>
+
+<p id="first">🥇 1st: Loading...</p>
+<p id="second">🥈 2nd: Loading...</p>
+<p id="third">🥉 3rd: Loading...</p>
+
+</div>
+
 <section id="home">
 <h2>Welcome</h2>
 <p>This website provides study material for COPA students.</p>
@@ -136,6 +145,56 @@ border-radius:5px;
 <p>© COPA Students Portal GANGAPUR</p>
 
 </footer>
+<script src="config.js"></script>
 
+<script>
+
+const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=Form Responses 1`;
+
+fetch(url)
+.then(res => res.text())
+.then(data => {
+
+    const jsonData = JSON.parse(data.substring(47).slice(0, -2));
+    const rows = jsonData.table.rows;
+
+    let students = [];
+
+    rows.forEach(row => {
+        let scoreRaw = row.c[1]?.v; // score column
+        let name = row.c[2]?.v;     // name column
+
+        if(scoreRaw && name){
+
+            // "26 / 40" → 26 निकालना
+            let score = parseInt(scoreRaw.split("/")[0]);
+
+            students.push({
+                name: name,
+                score: score
+            });
+        }
+    });
+
+    // score के हिसाब से sort (high to low)
+    students.sort((a,b) => b.score - a.score);
+
+    // Top 3 set करें
+    if(students[0]){
+        document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
+    }
+
+    if(students[1]){
+        document.getElementById("second").innerText = "🥈 2nd: " + students[1].name;
+    }
+
+    if(students[2]){
+        document.getElementById("third").innerText = "🥉 3rd: " + students[2].name;
+    }
+
+})
+.catch(err => console.log(err));
+
+</script>
 </body>
 </html>
