@@ -61,16 +61,22 @@ color:white;
 border:none;
 border-radius:5px;
 }
-/* Top Performers Box */
-#top3{
-    position: fixed;
-    right: 20px;
-    top: 180px;
-    width: 220px;
+.home-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.welcome{
+    width: 70%;
+}
+
+.top-box{
+    width: 28%;
     background: white;
     padding: 15px;
     border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
     text-align: center;
 }
 
@@ -80,24 +86,22 @@ border-radius:5px;
     margin: 10px 0;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 16px;
 }
 
-/* Gold */
+/* Colors */
 .first{
     background: linear-gradient(45deg, gold, orange);
 }
 
-/* Silver */
 .second{
     background: linear-gradient(45deg, silver, gray);
 }
 
-/* Bronze */
 .third{
     background: linear-gradient(45deg, #cd7f32, #8b4513);
     color: white;
 }
+
 </style>
 </head>
 
@@ -119,7 +123,17 @@ border-radius:5px;
 <a href="#contact">Contact</a>
 </nav>
 
-<div id="top3">
+<section id="home">
+
+<div class="home-container">
+
+<div class="welcome">
+<h2>Welcome</h2>
+<p>This website provides study material for COPA students.</p>
+<p>Subjects: HTML, JavaScript, MS Word, Excel, Networking, Internet</p>
+</div>
+
+<div class="top-box">
 <h3>🏆 Top Performers</h3>
 
 <div class="rank first" id="first">🥇 1st: Loading...</div>
@@ -128,10 +142,8 @@ border-radius:5px;
 
 </div>
 
-<section id="home">
-<h2>Welcome</h2>
-<p>This website provides study material for COPA students.</p>
-<p>Subjects: HTML, Java Script , MS Word, Excel, Networking,internet</p>
+</div>
+
 </section>
 
 <section id="notes">
