@@ -3,7 +3,7 @@
 <head>
 <title>COPA Study Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<iframe src="leaderboard.html" id="leaderFrame" style="display:none;"></iframe>
 <style>
 
 body{
@@ -61,43 +61,7 @@ color:white;
 border:none;
 border-radius:5px;
 }
-/* Top Performers Box */
-#top3{
-    position: fixed;
-    right: 20px;
-    top: 180px;
-    width: 220px;
-    background: white;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    text-align: center;
-}
 
-/* Rank Style */
-.rank{
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-/* Gold */
-.first{
-    background: linear-gradient(45deg, gold, orange);
-}
-
-/* Silver */
-.second{
-    background: linear-gradient(45deg, silver, gray);
-}
-
-/* Bronze */
-.third{
-    background: linear-gradient(45deg, #cd7f32, #8b4513);
-    color: white;
-}
 </style>
 </head>
 
@@ -107,7 +71,54 @@ border-radius:5px;
 <h1>COPA Study Portal</h1>
 <p>Computer Operator & Programming Assistant</p>
 </header>
-<iframe src="leaderboard.html" id="leaderFrame" style="display:none;"></iframe>
+<script>
+
+setTimeout(function(){
+
+    var frame = document.getElementById("leaderFrame");
+    var table = frame.contentWindow.document.getElementById("leaderboard");
+
+    var rows = table.getElementsByTagName("tr");
+
+    var students = [];
+
+    for(var i=1; i<rows.length; i++){
+        var cols = rows[i].getElementsByTagName("td");
+
+        var score = cols[0].innerText;
+        var name = cols[1].innerText;
+
+        var num = score.match(/\d+/);
+
+        if(num){
+            students.push({
+                name: name,
+                score: parseInt(num[0])
+            });
+        }
+    }
+
+    students.sort(function(a,b){
+        return b.score - a.score;
+    });
+
+    if(students[0]){
+        document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
+    }
+
+    if(students[1]){
+        document.getElementById("second").innerText = "🥈 2nd: " + students[1].name;
+    }
+
+    if(students[2]){
+        document.getElementById("third").innerText = "🥉 3rd: " + students[2].name;
+    }
+
+}, 3000);
+
+</script>
+
+
 <nav>
 <a href="admin.html">Admin</a>
 <a href="#home">Home</a>
@@ -118,15 +129,6 @@ border-radius:5px;
 <a href="leaderboard.html">Leaderboard</a>
 <a href="#contact">Contact</a>
 </nav>
-
-<div id="top3">
-<h3>🏆 Top Performers</h3>
-
-<div class="rank first" id="first">🥇 1st: Loading...</div>
-<div class="rank second" id="second">🥈 2nd: Loading...</div>
-<div class="rank third" id="third">🥉 3rd: Loading...</div>
-
-</div>
 
 <section id="home">
 <h2>Welcome</h2>
@@ -182,53 +184,5 @@ border-radius:5px;
 
 </footer>
 
-
-<!-- rank wala code-->
-<script>
-
-setTimeout(function(){
-
-    var frame = document.getElementById("leaderFrame");
-    var table = frame.contentWindow.document.getElementById("leaderboard");
-
-    var rows = table.getElementsByTagName("tr");
-
-    var students = [];
-
-    for(var i=1; i<rows.length; i++){
-        var cols = rows[i].getElementsByTagName("td");
-
-        var score = cols[0].innerText;
-        var name = cols[1].innerText;
-
-        var num = score.match(/\d+/);
-
-        if(num){
-            students.push({
-                name: name,
-                score: parseInt(num[0])
-            });
-        }
-    }
-
-    students.sort(function(a,b){
-        return b.score - a.score;
-    });
-
-    if(students[0]){
-        document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
-    }
-
-    if(students[1]){
-        document.getElementById("second").innerText = "🥈 2nd: " + students[1].name;
-    }
-
-    if(students[2]){
-        document.getElementById("third").innerText = "🥉 3rd: " + students[2].name;
-    }
-
-}, 3000);
-
-</script>
 </body>
 </html>
