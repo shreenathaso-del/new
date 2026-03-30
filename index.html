@@ -71,7 +71,7 @@ border-radius:5px;
 <h1>COPA Study Portal</h1>
 <p>Computer Operator & Programming Assistant</p>
 </header>
-
+<iframe src="leaderboard.html" id="leaderFrame" style="display:none;"></iframe>
 <nav>
 <a href="admin.html">Admin</a>
 <a href="#home">Home</a>
@@ -150,56 +150,48 @@ border-radius:5px;
 
 <script>
 
+setTimeout(function(){
 
+    var frame = document.getElementById("leaderFrame");
+    var table = frame.contentWindow.document.getElementById("leaderboard");
 
-var url = "https://docs.google.com/spreadsheets/d/" + sheetID + "/gviz/tq?tqx=out:csv&gid=220932831";
-
-fetch(url)
-.then(function(res){ return res.text(); })
-.then(function(csv){
-
-    var rows = csv.split("\n").slice(1);
+    var rows = table.getElementsByTagName("tr");
 
     var students = [];
 
-    rows.forEach(function(row){
-        if(row.trim() !== ""){
+    for(var i=1; i<rows.length; i++){
+        var cols = rows[i].getElementsByTagName("td");
 
-            var cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        var score = cols[0].innerText;
+        var name = cols[1].innerText;
 
-            var scoreRaw = cols[1];
-            var name = cols[2];
+        var num = score.match(/\d+/);
 
-            if(scoreRaw && name){
-
-                scoreRaw = scoreRaw.replace(/"/g,'').trim();
-                name = name.replace(/"/g,'').trim();
-
-                var match = scoreRaw.match(/\d+/);
-
-                if(match){
-                    var score = parseInt(match[0]);
-
-                    students.push({
-                        name: name,
-                        score: score
-                    });
-                }
-            }
+        if(num){
+            students.push({
+                name: name,
+                score: parseInt(num[0])
+            });
         }
+    }
+
+    students.sort(function(a,b){
+        return b.score - a.score;
     });
 
-    students.sort(function(a,b){ return b.score - a.score; });
+    if(students[0]){
+        document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
+    }
 
-    document.getElementById("first").innerText = students[0] ? "🥇 1st: " + students[0].name : "No Data";
-    document.getElementById("second").innerText = students[1] ? "🥈 2nd: " + students[1].name : "No Data";
-    document.getElementById("third").innerText = students[2] ? "🥉 3rd: " + students[2].name : "No Data";
+    if(students[1]){
+        document.getElementById("second").innerText = "🥈 2nd: " + students[1].name;
+    }
 
-})
-.catch(function(err){
-    console.log(err);
-    alert("Error aa raha hai");
-});
+    if(students[2]){
+        document.getElementById("third").innerText = "🥉 3rd: " + students[2].name;
+    }
+
+}, 3000);
 
 </script>
 </body>
