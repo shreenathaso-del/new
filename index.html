@@ -236,15 +236,15 @@ setTimeout(function(){
     });
 
     if(students[0]){
-        document.getElementById("first").innerText = "🥇 1st: " + students[0].name;
+        document.getElementById("first").innerText = students[0] ? "🥇 1st: " + students[0].name + " (" + students[0].score + ")" : "No Data";
     }
 
     if(students[1]){
-        document.getElementById("second").innerText = "🥈 2nd: " + students[1].name;
+        document.getElementById("second").innerText = students[1] ? "🥈 2nd: " + students[1].name + " (" + students[1].score + ")" : "No Data";
     }
 
     if(students[2]){
-        document.getElementById("third").innerText = "🥉 3rd: " + students[2].name;
+        document.getElementById("third").innerText = students[2] ? "🥉 3rd: " + students[2].name + " (" + students[2].score + ")" : "No Data";
     }
 
 }, 3000);
