@@ -204,50 +204,65 @@ border-radius:5px;
 
 
 <!-- rank wala code-->
+<script src="config.js"></script>
+
 <script>
 
-setTimeout(function(){
+var url = "https://docs.google.com/spreadsheets/d/" + sheetID + "/gviz/tq?tqx=out:csv";
 
-    var frame = document.getElementById("leaderFrame");
-    var table = frame.contentWindow.document.getElementById("leaderboard");
+fetch(url)
+.then(function(res){ return res.text(); })
+.then(function(csv){
 
-    var rows = table.getElementsByTagName("tr");
+    var rows = csv.split("\n").slice(1);
 
     var students = [];
 
-    for(var i=1; i<rows.length; i++){
-        var cols = rows[i].getElementsByTagName("td");
+    rows.forEach(function(row){
+        if(row.trim() !== ""){
 
-        var score = cols[0].innerText;
-        var name = cols[1].innerText;
+            var cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-        var num = score.match(/\d+/);
+            var scoreRaw = cols[1];
+            var name = cols[2];
 
-        if(num){
-            students.push({
-                name: name,
-                score: parseInt(num[0])
-            });
+            if(scoreRaw && name){
+
+                scoreRaw = scoreRaw.replace(/"/g,'').trim();
+                name = name.replace(/"/g,'').trim();
+
+                var num = scoreRaw.match(/\d+/);
+
+                if(num){
+                    students.push({
+                        name: name,
+                        score: parseInt(num[0])
+                    });
+                }
+            }
         }
-    }
+    });
 
+    // 🔥 sorting same as leaderboard
     students.sort(function(a,b){
         return b.score - a.score;
     });
 
-    if(students[0]){
-        document.getElementById("first").innerText = students[0] ? "🥇 1st: " + students[0].name + " (" + students[0].score + ")" : "No Data";
-    }
+    // 🔥 Top 3
+    document.getElementById("first").innerText =
+        students[0] ? "🥇 1st: " + students[0].name + " (" + students[0].score + ")" : "No Data";
 
-    if(students[1]){
-        document.getElementById("second").innerText = students[1] ? "🥈 2nd: " + students[1].name + " (" + students[1].score + ")" : "No Data";
-    }
+    document.getElementById("second").innerText =
+        students[1] ? "🥈 2nd: " + students[1].name + " (" + students[1].score + ")" : "No Data";
 
-    if(students[2]){
-        document.getElementById("third").innerText = students[2] ? "🥉 3rd: " + students[2].name + " (" + students[2].score + ")" : "No Data";
-    }
+    document.getElementById("third").innerText =
+        students[2] ? "🥉 3rd: " + students[2].name + " (" + students[2].score + ")" : "No Data";
 
-}, 3000);
+})
+.catch(function(err){
+    console.log(err);
+    alert("Data load nahi ho raha");
+});
 
 </script>
 </body>
