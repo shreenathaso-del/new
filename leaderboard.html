@@ -1,85 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Top Students - Leaderboard</title>
+<title>Leaderboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-.home-btn {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 15px;
-    background: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-.home-btn:hover {
-    background: #2980b9;
-}
-body {
+body{
     font-family: Arial;
-    margin: 0;
-    background: #f4f6f9;
+    margin:0;
+    background:#f4f6f9;
 }
 
-header {
-    background: #2c3e50;
-    color: white;
-    text-align: center;
-    padding: 20px;
+header{
+    background:#2c3e50;
+    color:white;
+    text-align:center;
+    padding:15px;
 }
 
-h2 {
-    text-align: center;
-    margin-top: 20px;
+table{
+    width:90%;
+    margin:20px auto;
+    border-collapse:collapse;
+    background:white;
 }
 
-table {
-    width: 90%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
+th,td{
+    padding:12px;
+    text-align:center;
 }
 
-th, td {
-    padding: 12px;
-    text-align: center;
+th{
+    background:#34495e;
+    color:white;
 }
 
-th {
-    background: #34495e;
-    color: white;
-}
-
-tr:nth-child(even) {
-    background: #f2f2f2;
-}
-
-.top1 {
-    background: gold;
-    font-weight: bold;
-}
-
-.top2 {
-    background: silver;
-    font-weight: bold;
-}
-
-.top3 {
-    background: #cd7f32;
-    font-weight: bold;
-}
-
-footer {
-    text-align: center;
-    padding: 10px;
-    background: #2c3e50;
-    color: white;
+tr:nth-child(even){
+    background:#f2f2f2;
 }
 </style>
 </head>
@@ -87,28 +44,22 @@ footer {
 <body>
 
 <header>
-<h1>🏆 COPA Top Students Leaderboard</h1>
-<p>Performance & Practice Ranking</p>
+<h2>🏆 Live Leaderboard</h2>
 </header>
 
-<h2>Top Performers</h2>
-<a href="index.html" class="home-btn">🏠 Home</a>
-
-
-
-<h2>🏆 Live Leaderboard</h2>
-
-<table border="1" id="leaderboard">
+<table id="leaderboard">
 <tr>
-<th>Score</th>
+<th>Rank</th>
 <th>Name</th>
+<th>Score</th>
 </tr>
 </table>
 
 <script>
+
+// 👉 बस यह बदलना है
 var sheetID = "1HnWEW3rFDynr3jGM0WjvmTuoTfzDbppQeghkGMmb5FU";
 
-// ✅ सही URL (CSV format)
 var url = "https://docs.google.com/spreadsheets/d/" + sheetID + "/gviz/tq?tqx=out:csv";
 
 fetch(url)
@@ -143,8 +94,8 @@ fetch(url)
         }
     });
 
-    // 🔥 sorting
-    /*students.sort(function(a,b){
+    // 🔥 sorting (highest first)
+    students.sort(function(a,b){
         return b.score - a.score;
     });
 
@@ -154,28 +105,21 @@ fetch(url)
 
         var tr = document.createElement("tr");
 
-        // Top 3 highlight
-        //if(i==0) tr.className="top1";
-       // if(i==1) tr.className="top2";
-       // if(i==2) tr.className="top3";
-
         tr.innerHTML =
-        "<td>"+s.score+"</td>"+
-        "<td>"+s.name+"</td>";
+        "<td>"+(i+1)+"</td>"+
+        "<td>"+s.name+"</td>"+
+        "<td>"+s.score+"</td>";
 
         table.appendChild(tr);
-    });*/
+    });
 
 })
 .catch(function(err){
     console.log(err);
-    alert("Sheet load nahi ho rahi");
+    alert("Data load nahi ho raha");
 });
 
 </script>
-<footer>
-<p>© COPA Student Portal</p>
-</footer>
 
 </body>
 </html>
