@@ -107,43 +107,72 @@ footer {
 </table>
 
 <script>
-const sheetID = "1HnWEW3rFDynr3jGM0WjvmTuoTfzDbppQeghkGMmb5FU";
+var sheetID = "1HnWEW3rFDynr3jGM0WjvmTuoTfzDbppQeghkGMmb5FU";
 
-// ⚠️ yaha sheet name add kiya
-const url = `https://docs.google.com/spreadsheets/d/1HnWEW3rFDynr3jGM0WjvmTuoTfzDbppQeghkGMmb5FU/edit?usp=sharing`;
+// ✅ सही URL (CSV format)
+var url = "https://docs.google.com/spreadsheets/d/" + sheetID + "/gviz/tq?tqx=out:csv";
 
 fetch(url)
-.then(res => res.text())
-.then(csv => {
-    console.log(csv); // debug
+.then(function(res){ return res.text(); })
+.then(function(csv){
 
-    const rows = csv.split("\n").slice(1);
-    const table = document.getElementById("leaderboard");
+    var rows = csv.split("\n").slice(1);
+    var students = [];
 
-    rows.forEach(row => {
+    rows.forEach(function(row){
         if(row.trim() !== ""){
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-            let score = cols[1]?.replace(/"/g, '').trim();
-            let name = cols[2]?.replace(/"/g, '').trim();
+            var cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
 
-            if(score && name){
-                let tr = document.createElement("tr");
+            var scoreRaw = cols[1];
+            var name = cols[2];
 
-                let td1 = document.createElement("td");
-                td1.innerText = score;
+            if(scoreRaw && name){
 
-                let td2 = document.createElement("td");
-                td2.innerText = name;
+                scoreRaw = scoreRaw.replace(/"/g,'').trim();
+                name = name.replace(/"/g,'').trim();
 
-                tr.appendChild(td1);
-                tr.appendChild(td2);
-                table.appendChild(tr);
+                var num = scoreRaw.match(/\d+/);
+
+                if(num){
+                    students.push({
+                        name: name,
+                        score: parseInt(num[0])
+                    });
+                }
             }
         }
     });
+
+    // 🔥 sorting
+    students.sort(function(a,b){
+        return b.score - a.score;
+    });
+
+    var table = document.getElementById("leaderboard");
+
+    students.forEach(function(s,i){
+
+        var tr = document.createElement("tr");
+
+        // Top 3 highlight
+        if(i==0) tr.className="top1";
+        if(i==1) tr.className="top2";
+        if(i==2) tr.className="top3";
+
+        tr.innerHTML =
+        "<td>"+s.score+"</td>"+
+        "<td>"+s.name+"</td>";
+
+        table.appendChild(tr);
+    });
+
 })
-.catch(err => console.error("Error:", err));
+.catch(function(err){
+    console.log(err);
+    alert("Sheet load nahi ho rahi");
+});
+
 </script>
 <footer>
 <p>© COPA Student Portal</p>
